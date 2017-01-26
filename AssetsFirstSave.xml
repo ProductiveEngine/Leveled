@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bksavegame version="1.0.1.1">
+	<Writable name="GameObject6">
+		<state active="true" />
+	</Writable>
+	<Writable name="GameObject7">
+		<state active="true" />
+	</Writable>
+</bksavegame>
