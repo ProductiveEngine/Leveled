@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class InstantiateCars : MonoBehaviour
 {
-
     private Vector3 positionOne;
     private Vector3 positionTwo;
     private Vector3 positionThree;
@@ -29,7 +28,6 @@ public class InstantiateCars : MonoBehaviour
         showTheCar();
     }
 
-
     private IEnumerator showTheCar()
     {
         GameObject myCar = (GameObject)Instantiate(carPrefab, positionTwo, Quaternion.identity);
@@ -47,43 +45,43 @@ public class InstantiateCars : MonoBehaviour
 
         enemyCar.GetComponent(CONTROL).enableFuzzyLogic = true;
     }
-}
 
-private Vector3 getPosition(int i)
-{
-    Vector3 result;
 
-    switch (i)
+    private Vector3 getPosition(int i)
     {
-        case 1:
-            result = positionOne;
-            break;
-        case 2:
-            result = positionTwo;
-            break;
-        case 3:
-            result = positionThree;
-            break;
-        case 4:
-            result = positionFour;
-            break;
-        case 5:
-            result = positionFive;
-            break;
-        case 6:
-            result = positionSix;
-            break;
-        case 7:
-            result = positionSeven;
-            break;
-        case 8:
-            result = positionEight;
-            break;
-        default:
-            result = positionOne;
-            break;
-    }
+        Vector3 result;
 
-    return result;
-}
+        switch (i)
+        {
+            case 1:
+                result = positionOne;
+                break;
+            case 2:
+                result = positionTwo;
+                break;
+            case 3:
+                result = positionThree;
+                break;
+            case 4:
+                result = positionFour;
+                break;
+            case 5:
+                result = positionFive;
+                break;
+            case 6:
+                result = positionSix;
+                break;
+            case 7:
+                result = positionSeven;
+                break;
+            case 8:
+                result = positionEight;
+                break;
+            default:
+                result = positionOne;
+                break;
+        }
+
+        return result;
+    }
 }
