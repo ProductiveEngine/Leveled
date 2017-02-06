@@ -3,7 +3,7 @@
 public class HealthControlScript : MonoBehaviour
 {
     public GUISkin customSkin;
-    public Transform deadCar;
+    public GameObject deadCar;
     public GameObject healthMap;
 
     public float health = 100.0f;
@@ -182,7 +182,7 @@ public class HealthControlScript : MonoBehaviour
         }
     }
 
-    void DisableUser()
+    public void DisableUser()
     {
         userControls = false;
     }

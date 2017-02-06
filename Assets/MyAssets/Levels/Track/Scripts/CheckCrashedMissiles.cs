@@ -10,7 +10,7 @@ public class CheckCrashedMissiles : MonoBehaviour
 
         foreach (var checkSpeedMissile in checkSpeedMissiles)
         {
-            if (checkSpeedMissile.GetComponent("SpeedMissileScript").crashed)
+            if (checkSpeedMissile.GetComponent<SpeedMissileScript>().crashed)
             {
                 Destroy(checkSpeedMissile);
             }
@@ -20,7 +20,7 @@ public class CheckCrashedMissiles : MonoBehaviour
 
         foreach (var checkHomingMissile in checkHomingMissiles)
         {
-            if (checkHomingMissile.GetComponent("HomingMissileScript").crashed)
+            if (checkHomingMissile.GetComponent<HomingMissileScript>().crashed)
             {
                 Destroy(checkHomingMissile);
             }
@@ -30,7 +30,7 @@ public class CheckCrashedMissiles : MonoBehaviour
 
         foreach (var checkPowerMissile in checkPowerMissiles)
         {
-            if (checkPowerMissile.GetComponent("PowerMissileScript").crashed)
+            if (checkPowerMissile.GetComponent<PowerMissileScript>().crashed)
             {
                 Destroy(checkPowerMissile);
             }

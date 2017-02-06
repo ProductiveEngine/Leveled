@@ -16,7 +16,7 @@ public class HomingMissileScript : MonoBehaviour
 
     float damping = 1.0f;
     float drivespeed = 60;
-    bool crashed = false;
+    public bool crashed = false;
 
     private bool homingControl = false;
     private bool fireMissile = false;

@@ -1,17 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class Instatiation : MonoBehaviour {
-import System;
-import System.Xml; 
-import System.Xml.XPath; 
-import System.IO; 
-import System.Xml.Serialization;
+public class Instatiation : MonoBehaviour
+{
 
- Transform customPrefab;
+    public Transform customPrefab;
 
-void  Start (){
-	Instantiate(customPrefab,Vector3(504.5801f , 8 , -95.47156f), Quaternion.identity);
-}
+    void Start()
+    {
+        Instantiate(customPrefab, new Vector3(504.5801f, 8, -95.47156f), Quaternion.identity);
+    }
 
 }

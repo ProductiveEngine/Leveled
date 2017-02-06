@@ -689,7 +689,7 @@ public class ControlScript : MonoBehaviour
     private float cornerSlip = 0.0f;
     private float driveSlip = 0.0f;
 
-    bool waitCountDown = false;
+    public bool waitCountDown = false;
     // Approximate motor torque curve with a simple parabola: 
     // torque goes from motorMinTorque at zero RPM to motorMaxTorque at 
     // motorRpmRange/2 RPM then back to motorMinTorque at motorRpmRange. 
@@ -704,7 +704,7 @@ public class ControlScript : MonoBehaviour
     float lowSpeedSteerAngle = 80.0f;
     float highSpeedSteerAngle = 30;
     float highSpeed = 70.0f;
-    float topSpeed = 250;
+    public float topSpeed = 250;
     // How much we move the mass center vertically. 
     float massCenterY = -0.2f;
 
@@ -720,7 +720,7 @@ public class ControlScript : MonoBehaviour
     private float brake = 0.0f;
     private float handbrake = 0.0f;
     private float steer = 0.0f;
-    float motor = 0.0f;
+    public float motor = 0.0f;
 
     // Wheel geometry
     Transform FL;
@@ -729,7 +729,7 @@ public class ControlScript : MonoBehaviour
     Transform RR;
 
     int currentGear = 0;
-    float engineRPM = 0.0f;
+    public float engineRPM = 0.0f;
     float wheelRPM = 0.0f;
 
     int rev = 1;
@@ -810,7 +810,7 @@ public class ControlScript : MonoBehaviour
 
     GunControlScript guns;
     public bool userControl = true;
-    void EnableUser()
+    public void EnableUser()
     {
         OverrideStart = false;
         userControl = true;
@@ -850,7 +850,7 @@ public class ControlScript : MonoBehaviour
         go.SendMessage("SetTarget", transform);
         go.SendMessage("OpenRadar", 1);
     }
-    void DisableUser()
+    public void DisableUser()
     {
         userControl = false;
         Invoke("setOverrideStart", 4);
@@ -925,12 +925,12 @@ public class ControlScript : MonoBehaviour
 
             w.coll = colliderObject.AddComponent<WheelCollider>();
             w.coll.suspensionDistance = suspensionDistance;
-            w.coll.suspensionSpring.spring = springs;
-            w.coll.suspensionSpring.damper = dampers;
+            w.coll.suspensionSpring = new JointSpring() { damper = dampers, spring = springs };
             w.coll.radius = wheelRadius;
             w.coll.mass = wheelMass;
-            w.coll.forwardFriction.stiffness = 2.092f;
-            w.coll.sidewaysFriction.stiffness = 0.022f;
+            //--------------------
+            w.coll.forwardFriction = new WheelFrictionCurve() { stiffness = 2.092f };
+            w.coll.sidewaysFriction = new WheelFrictionCurve() { stiffness = 0.022f };
         }
         GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.1f, 0.0f);
         currentGear = 1;
@@ -969,7 +969,10 @@ public class ControlScript : MonoBehaviour
             if (c.GetGroundHit(out hit))
             {
                 //if the wheels touches the ground, adjust graphical wheel position to reflect springs
-                w.geometry.localPosition.y -= Vector3.Dot(w.geometry.position - hit.point, transform.up) - w.coll.radius;
+                w.geometry.localPosition.Set(
+                    w.geometry.localPosition.x,
+                    w.geometry.localPosition.y - (Vector3.Dot(w.geometry.position - hit.point, transform.up) - w.coll.radius),
+                    w.geometry.localPosition.z);
             }
         }
     }
@@ -1206,15 +1209,15 @@ public class ControlScript : MonoBehaviour
 
     void RestoreFriction()
     {
-        wheels[0].coll.sidewaysFriction.extremumValue = 20000;
-        wheels[1].coll.sidewaysFriction.extremumValue = 20000;
-        wheels[2].coll.sidewaysFriction.extremumValue = 20000;
-        wheels[3].coll.sidewaysFriction.extremumValue = 20000;
+        wheels[0].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        wheels[1].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        wheels[2].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        wheels[3].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
 
-        wheels[0].coll.forwardFriction.extremumValue = 20000;
-        wheels[1].coll.forwardFriction.extremumValue = 20000;
-        wheels[2].coll.forwardFriction.extremumValue = 20000;
-        wheels[3].coll.forwardFriction.extremumValue = 20000;
+        wheels[0].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        wheels[1].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        wheels[2].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        wheels[3].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
 
     }
     void ApplyAdditionalSteeringForce(float addSteer)
@@ -1230,8 +1233,8 @@ public class ControlScript : MonoBehaviour
             if (w.coll.isGrounded)
             {
                 onGround = true;
-                w.coll.sidewaysFriction.extremumValue = 1000;
-                w.coll.forwardFriction.extremumValue = 1000;
+                w.coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (1000) };
+                w.coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (1000) };
                 overrideForHandbrake = true;
             }
         }
@@ -1250,7 +1253,7 @@ public class ControlScript : MonoBehaviour
                 ++groundedCount;
                 WheelHit hit;
                 WheelCollider wc = w.coll;
-                wc.GetGroundHit(hit);
+                wc.GetGroundHit(out hit);
                 sidewaysSlip += hit.sidewaysSlip;
                 forwardSlip += hit.forwardSlip;
                 //temp = w.coll.radius;
@@ -1657,9 +1660,8 @@ public class ControlScript : MonoBehaviour
             Debug.Log("flag status : " + flagRaised + "   " + currentWaypoint);
         }
         Vector3 RelativeWaypointPosition =
-            transform.InverseTransformPoint(new Vector3(waypoints[currentWaypoint].posX, transform.position.y,
-                waypoints[currentWaypoint].posY));
-
+            transform.InverseTransformPoint(new Vector3(waypoints[currentWaypoint].position.x, transform.position.y,
+                waypoints[currentWaypoint].position.y));
 
         // by dividing the horizontal position by the magnitude, we get a decimal percentage of the turn angle that we can use to drive the wheels
         if (enableControlToWaypoints)

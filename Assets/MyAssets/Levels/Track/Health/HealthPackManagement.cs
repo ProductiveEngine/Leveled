@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HealthPackManagement : MonoBehaviour
 {
-    Transform custom1;
+    GameObject custom1;
 
     Vector3 pos1;
     Vector3 pos2;

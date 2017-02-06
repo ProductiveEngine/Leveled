@@ -8,7 +8,7 @@ public class SpeedMissileScript : MonoBehaviour
     float power = 1000000.0f;
     float damping = 1.0f;
     float drivespeed = 170;
-    bool crashed = false;
+    public bool crashed = false;
 
     private bool fireMissile = false;
     private Vector3 direction;

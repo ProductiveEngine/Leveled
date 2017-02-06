@@ -3,9 +3,9 @@
 public class GunControlScript : MonoBehaviour
 {
 
-    Transform speedMissilePrefab;
-    Transform homingMissilePrefab;
-    Transform powerMissilePrefab;
+    GameObject speedMissilePrefab;
+    GameObject homingMissilePrefab;
+    GameObject powerMissilePrefab;
 
     GameObject missileMap;
     GameObject enemyLocked;
@@ -207,7 +207,7 @@ public class GunControlScript : MonoBehaviour
         take2 = true;
     }
 
-    void DisableUser()
+    public void DisableUser()
     {
         userControls = false;
     }

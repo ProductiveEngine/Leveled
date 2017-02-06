@@ -1,51 +1,53 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class FlagReseter : MonoBehaviour {
+public class FlagReseter : MonoBehaviour
+{
 
-private bool  ok = true;
+    private bool ok = true;
 
-void  OnTriggerEnter ( Collider other  ){
+    void OnTriggerEnter(Collider other)
+    {
 
-	if(ok && other.tag == "roofTag" )
-	{
-		ok = false;	
-		FindFarestEnemy().GetComponent<"HealthControlScript">().health = 0;
+        if (ok && other.tag == "roofTag")
+        {
+            ok = false;
+            FindFarestEnemy().GetComponent<HealthControlScript>().health = 0;
 
-		GameObject go;
-		go = GameObject.FindGameObjectWithTag("flagTag");
+            GameObject go;
+            go = GameObject.FindGameObjectWithTag("flagTag");
 
-		go.GetComponent<"FlagScript">().ResetFlag();
-		Destroy(gameObject);
-	}
-	
-}
+            go.GetComponent<FlagScript>().ResetFlag();
+            Destroy(gameObject);
+        }
 
-// Find the name of the farest enemy
-GameObject FindFarestEnemy (){
-	// Find all game objects with tag Enemy
-	GameObject[] gos;
-	gos = GameObject.FindGameObjectsWithTag("carTag");	
-	GameObject farest;
-	FIXME_VAR_TYPE distance= 0;
-	FIXME_VAR_TYPE position= transform.position;
+    }
 
-	// Iterate through them and find the farest one
-	foreach(GameObject go in gos) 
-	{
-		if(go.transform.position != transform.position && !go.transform.IsChildOf(transform)  )
-		{
-			FIXME_VAR_TYPE diff= (go.transform.position - position);
-			FIXME_VAR_TYPE curDistance= diff.sqrMagnitude;
+    // Find the name of the farest enemy
+    GameObject FindFarestEnemy()
+    {
+        // Find all game objects with tag Enemy
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("carTag");
+        GameObject farest = null;
+        float distance = 0;
+        Vector3 position = transform.position;
 
-			if (curDistance > distance) 
-			{
-				farest = go;
-				distance = curDistance;
-			}
-		}
-	}
+        // Iterate through them and find the farest one
+        foreach (GameObject go in gos)
+        {
+            if (go.transform.position != transform.position && !go.transform.IsChildOf(transform))
+            {
+                Vector3 diff = (go.transform.position - position);
+                float curDistance = diff.sqrMagnitude;
 
-	return farest;
-}
+                if (curDistance > distance)
+                {
+                    farest = go;
+                    distance = curDistance;
+                }
+            }
+        }
+
+        return farest;
+    }
 }

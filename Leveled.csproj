@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -99,9 +101,11 @@
     <Compile Include="Assets\MyAssets\Levels\Track\Scripts\CheckCrashedMissiles.cs" />
     <Compile Include="Assets\MyAssets\Levels\Track\Scripts\ControlScript.cs" />
     <Compile Include="Assets\MyAssets\Levels\Track\Scripts\InstantiateCars.cs" />
+    <Compile Include="Assets\MyAssets\Scripts\Ai\EdgeInfo.cs" />
     <Compile Include="Assets\MyAssets\Scripts\Ai\FlagReseter.cs" />
     <Compile Include="Assets\MyAssets\Scripts\Ai\FlagScript.cs" />
     <Compile Include="Assets\MyAssets\Scripts\Ai\GridGenerator.cs" />
+    <Compile Include="Assets\MyAssets\Scripts\Ai\NodeInfo.cs" />
     <Compile Include="Assets\MyAssets\Scripts\Ai\WaypointInfo.cs" />
     <Compile Include="Assets\MyAssets\Scripts\BlobShadowController.cs" />
     <Compile Include="Assets\MyAssets\Scripts\CountDownScript.cs" />
@@ -115,7 +119,6 @@
     <Compile Include="Assets\MyAssets\Scripts\Models\CarInfo.cs" />
     <Compile Include="Assets\MyAssets\Scripts\Radar.cs" />
     <Compile Include="Assets\MyAssets\Scripts\SaveLoadScript.cs" />
-    <Compile Include="Assets\MyAssets\Scripts\countDown.cs" />
     <Compile Include="Assets\MyAssets\Scripts\pauseScreen.cs" />
     <Compile Include="Assets\MyAssets\Scripts\roof180.cs" />
     <Compile Include="Assets\Sound\SoundController.cs" />

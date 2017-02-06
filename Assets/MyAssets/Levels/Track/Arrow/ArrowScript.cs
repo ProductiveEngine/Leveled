@@ -1,22 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ArrowScript : MonoBehaviour
 {
-	public Transform target;
+    public Transform target;
 
-	private boolean ok;
+    private bool ok;
 
-	void Update () {
-		if (ok)
-		{
-			transform.LookAt(target);
-		}
-	}
+    void Update()
+    {
+        if (ok)
+        {
+            transform.LookAt(target);
+        }
+    }
 
-	public void SetTarget(Transform t)
-	{
-		target = t;
-		ok = true;
-	}
+    public void SetTarget(Transform t)
+    {
+        target = t;
+        ok = true;
+    }
 }

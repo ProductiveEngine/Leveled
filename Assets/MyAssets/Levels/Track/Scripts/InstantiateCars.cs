@@ -28,22 +28,26 @@ public class InstantiateCars : MonoBehaviour
         showTheCar();
     }
 
-    private IEnumerator showTheCar()
+    private void showTheCar()
     {
-        GameObject myCar = (GameObject)Instantiate(carPrefab, positionTwo, Quaternion.identity);
-        myCar.GetComponent(typeof(CONTROL)) as CONTROL;
-        myCar.GetComponent<CONTROL>().EnableUser();
+        Transform myCar = Instantiate(carPrefab, positionTwo, Quaternion.identity);
+        myCar.GetComponent<ControlScript>().EnableUser();
 
 
         for (int i = 1; i < 9; i++)
         {
-            yield return new WaitForSeconds(1);
-            GameObject enemyCar = Instantiate(carPrefab, getPosition(i), Quaternion.identity);
-            enemyCar.GetComponent(typeof("HealthControlScript")).DisableUser();
-        enemyCar.GetComponent(GunControlScript).DisableUser();
-        enemyCar.GetComponent(CONTROL).DisableUser();
+            waitOne();
+            Transform enemyCar = Instantiate(carPrefab, getPosition(i), Quaternion.identity);
+            enemyCar.GetComponent<HealthControlScript>().DisableUser();
+            enemyCar.GetComponent<GunControlScript>().DisableUser();
+            enemyCar.GetComponent<ControlScript>().DisableUser();
+        }
 
-        enemyCar.GetComponent(CONTROL).enableFuzzyLogic = true;
+    }
+
+    IEnumerator waitOne()
+    {
+        yield return new WaitForSeconds(1);
     }
 
 
