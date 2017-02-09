@@ -88,4 +88,41 @@ public class InstantiateCars : MonoBehaviour
 
         return result;
     }
+
+    void Update()
+    {
+
+        GameObject[] checkSpeedMissiles = GameObject.FindGameObjectsWithTag("speedMissileTag");
+
+        foreach (var checkSpeedMissile in checkSpeedMissiles)
+        {
+            if (checkSpeedMissile.GetComponent<SpeedMissileScript>().crashed)
+            {
+
+                Destroy(checkSpeedMissile);
+            }
+        }
+
+        GameObject[] checkHomingMissiles = GameObject.FindGameObjectsWithTag("homingMissileTag");
+
+        foreach (var checkHomingMissile in checkHomingMissiles)
+        {
+
+            if (checkHomingMissile.GetComponent<HomingMissileScript>().crashed)
+            {
+                Destroy(checkHomingMissile);
+            }
+        }
+
+        GameObject[] checkPowerMissiles = GameObject.FindGameObjectsWithTag("powerMissileTag");
+
+        foreach (var checkPowerMissile in checkPowerMissiles)
+        {
+
+            if (checkPowerMissile.GetComponent<PowerMissileScript>().crashed)
+            {
+                Destroy(checkPowerMissile);
+            }
+        }
+    }
 }
