@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class MissilePackManagementScript : MonoBehaviour
 {
-    Transform custom1;
-    Transform custom2;
-    Transform custom3;
+    private GameObject custom1;
+    private GameObject custom2;
+    private GameObject custom3;
 
     Vector3 pos1;
     Vector3 pos2;
@@ -21,31 +21,35 @@ public class MissilePackManagementScript : MonoBehaviour
 
     void Start()
     {
-        Transform temp = (Transform)Instantiate(custom1, pos1, Quaternion.identity);
+        custom1 = Resources.Load("HomingMissilePackPosition") as GameObject;
+        custom2 = Resources.Load("PowerMissilePackPosition") as GameObject;
+        custom3 = Resources.Load("SpeedMissilePackPosition") as GameObject;
+
+        GameObject temp = (GameObject)Instantiate(custom1, pos1, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom2, pos2, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom2, pos2, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom1, pos3, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom1, pos3, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom2, pos4, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom2, pos4, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom1, pos5, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom1, pos5, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom2, pos6, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom2, pos6, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom3, pos7, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom3, pos7, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom3, pos8, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom3, pos8, Quaternion.identity);
         temp.transform.parent = transform;
 
-        temp = (Transform)Instantiate(custom3, pos9, Quaternion.identity);
+        temp = (GameObject)Instantiate(custom3, pos9, Quaternion.identity);
         temp.transform.parent = transform;
 
     }
@@ -67,7 +71,7 @@ public class MissilePackManagementScript : MonoBehaviour
 
         if (ok)
         {
-            Transform temp = (Transform)Instantiate(custom1, pos, Quaternion.identity);
+            GameObject temp = (GameObject)Instantiate(custom1, pos, Quaternion.identity);
             temp.transform.parent = transform;
         }
     }
@@ -89,7 +93,7 @@ public class MissilePackManagementScript : MonoBehaviour
 
         if (ok)
         {
-            Transform temp = (Transform)Instantiate(custom2, pos, Quaternion.identity);
+            GameObject temp = (GameObject)Instantiate(custom2, pos, Quaternion.identity);
             temp.transform.parent = transform;
         }
     }
@@ -112,7 +116,7 @@ public class MissilePackManagementScript : MonoBehaviour
 
         if (ok)
         {
-            Transform temp = (Transform)Instantiate(custom3, pos, Quaternion.identity);
+            GameObject temp = (GameObject)Instantiate(custom3, pos, Quaternion.identity);
             temp.transform.parent = transform;
         }
 

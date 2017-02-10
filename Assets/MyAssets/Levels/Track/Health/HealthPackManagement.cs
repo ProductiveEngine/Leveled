@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HealthPackManagement : MonoBehaviour
 {
-    GameObject custom1;
+    private GameObject custom1;
 
     Vector3 pos1;
     Vector3 pos2;
@@ -14,6 +14,8 @@ public class HealthPackManagement : MonoBehaviour
 
     void Start()
     {
+        custom1 = (Resources.Load("healthPackPosition") as GameObject);
+
         GameObject temp1 = (GameObject)Instantiate(custom1, pos1, Quaternion.identity);
         temp1.transform.parent = transform;
 

@@ -7,7 +7,7 @@ public class CountDownScript : MonoBehaviour
 
     Transform customprefab;
     public ControlScript carControlExternalScript;
-    GUISkin customSkin;
+    public GUISkin customSkin;
 
     void setUpCountDown(Transform t)
     {

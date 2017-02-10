@@ -723,10 +723,10 @@ public class ControlScript : MonoBehaviour
     public float motor = 0.0f;
 
     // Wheel geometry
-    Transform FL;
-    Transform FR;
-    Transform RL;
-    Transform RR;
+    public Transform FL;
+    public Transform FR;
+    public Transform RL;
+    public Transform RR;
 
     int currentGear = 0;
     public float engineRPM = 0.0f;
@@ -841,7 +841,6 @@ public class ControlScript : MonoBehaviour
         exAudio.volume = volume;
 
         Camera.main.SendMessage("SetTarget", transform);
-        Camera.main.SendMessage("setUpCountDown", transform);
         Camera.main.SendMessage("setUpGamePlayGui", transform);
 
         GameObject go;
@@ -916,6 +915,7 @@ public class ControlScript : MonoBehaviour
 
         foreach (wheel w in wheels)
         {
+
             w.originalRotation = w.geometry.localRotation;
 
             GameObject colliderObject = new GameObject("WheelCollider");

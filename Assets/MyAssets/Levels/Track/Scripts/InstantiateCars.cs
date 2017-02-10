@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class InstantiateCars : MonoBehaviour
 {
+    private bool playerWon = false;
+    public GUISkin customSkin;
+
     private Vector3 positionOne;
     private Vector3 positionTwo;
     private Vector3 positionThree;
@@ -11,8 +14,6 @@ public class InstantiateCars : MonoBehaviour
     private Vector3 positionSix;
     private Vector3 positionSeven;
     private Vector3 positionEight;
-
-    public Transform carPrefab;
 
     public void Start()
     {
@@ -28,16 +29,123 @@ public class InstantiateCars : MonoBehaviour
         showTheCar();
     }
 
+    private int countDown = 3;
+    bool ok = false;
+    private bool ok1 = false;
+    private bool ok2 = false;
+    private bool ok3 = false;
+    private bool ok4 = false;
+
+    void OnGUI()
+    {
+        GUI.skin = customSkin;
+
+        float downTime = Mathf.Floor(Time.timeSinceLevelLoad);
+
+        GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 200, 200));
+        GUILayout.BeginVertical();
+
+        if (!ok)
+        {
+            if (countDown == 3)
+            {
+                GUILayout.Label("Ready : " + countDown);
+            }
+            if (countDown == 2)
+            {
+                GUILayout.Label("Steady : " + countDown);
+            }
+            if (countDown == 1)
+            {
+                GUILayout.Label("Steady : " + countDown);
+            }
+            if (countDown == 0)
+            {
+                GUILayout.Label("GO!!! ");
+                myCarPrefab.GetComponent<ControlScript>().waitCountDown = false;
+            }
+            if (countDown == -1)
+            {
+                ok = true;
+            }
+
+        }
+        if (downTime >= 2 && !ok && !ok1)
+        {
+            countDown--;
+            ok1 = true;
+        }
+        else if (downTime >= 3 && !ok && !ok2)
+        {
+            countDown--;
+            ok2 = true;
+        }
+        else if (downTime >= 4 && !ok && !ok3)
+        {
+            countDown--;
+            ok3 = true;
+        }
+        else if (downTime >= 5 && !ok && !ok4)
+        {
+            countDown--;
+            ok4 = true;
+        }
+
+        GUILayout.EndVertical();
+        GUILayout.EndArea();
+
+
+        if (playerWon)
+        {
+            GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 50, 200, 200));
+
+            GUILayout.Label("You won !!!");
+
+            if (GUILayout.Button("Continue"))
+            {
+                Time.timeScale = 1;
+                Application.LoadLevel("Hall of fame");
+            }
+            if (GUILayout.Button("Restart"))
+            {
+                Time.timeScale = 1;
+                Application.LoadLevel((Application.loadedLevelName));
+            }
+            if (GUILayout.Button("Quit"))
+            {
+                Application.LoadLevel("Go Race");
+            }
+
+            GUILayout.EndArea();
+        }
+
+    }
+
+    void PlayerWon()
+    {
+        playerWon = true;
+    }
+
+    GameObject myCarPrefab;
+
     private void showTheCar()
     {
-        Transform myCar = Instantiate(carPrefab, positionTwo, Quaternion.identity);
+        myCarPrefab = GameObject.Instantiate(Resources.Load("CarFullPrefab") as GameObject);
+        myCarPrefab.GetComponent<ControlScript>().waitCountDown = true;
+        Transform myCar = Instantiate(myCarPrefab.GetComponent<Transform>(), positionTwo, Quaternion.identity);
         myCar.GetComponent<ControlScript>().EnableUser();
 
 
         for (int i = 1; i < 9; i++)
         {
+            if (i == 2)
+            {
+                continue;
+            }
+
             waitOne();
-            Transform enemyCar = Instantiate(carPrefab, getPosition(i), Quaternion.identity);
+            GameObject carPrefab = GameObject.Instantiate(Resources.Load("CarFullPrefab") as GameObject);
+            Transform enemyCar = Instantiate(carPrefab.GetComponent<Transform>(), getPosition(i), Quaternion.identity);
             enemyCar.GetComponent<HealthControlScript>().DisableUser();
             enemyCar.GetComponent<GunControlScript>().DisableUser();
             enemyCar.GetComponent<ControlScript>().DisableUser();
