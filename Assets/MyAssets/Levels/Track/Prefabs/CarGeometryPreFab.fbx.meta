@@ -6,16 +6,16 @@ ModelImporter:
     100000: BackLeftWheel
     100002: BackRightWheel
     100004: Body
-    100006: FrontLeftWheel
-    100008: FrontRightWheel
-    100010: //RootNode
+    100006: //RootNode
+    100008: FrontLeftWheel
+    100010: FrontRightWheel
     100012: Wheels
     400000: BackLeftWheel
     400002: BackRightWheel
     400004: Body
-    400006: FrontLeftWheel
-    400008: FrontRightWheel
-    400010: //RootNode
+    400006: //RootNode
+    400008: FrontLeftWheel
+    400010: FrontRightWheel
     400012: Wheels
     2300000: BackLeftWheel
     2300002: BackRightWheel
@@ -79,6 +79,7 @@ ModelImporter:
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -89,7 +90,10 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 1
   humanoidOversampling: 1

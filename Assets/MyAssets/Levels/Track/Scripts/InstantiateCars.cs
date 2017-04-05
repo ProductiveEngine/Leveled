@@ -101,11 +101,6 @@ public class InstantiateCars : MonoBehaviour
 
             GUILayout.Label("You won !!!");
 
-            if (GUILayout.Button("Continue"))
-            {
-                Time.timeScale = 1;
-                Application.LoadLevel("Hall of fame");
-            }
             if (GUILayout.Button("Restart"))
             {
                 Time.timeScale = 1;
@@ -130,13 +125,13 @@ public class InstantiateCars : MonoBehaviour
 
     private void showTheCar()
     {
-        myCarPrefab = GameObject.Instantiate(Resources.Load("CarFullPrefab") as GameObject);
+        myCarPrefab = GameObject.Instantiate(Resources.Load("CarPrefab") as GameObject);
         myCarPrefab.GetComponent<ControlScript>().waitCountDown = true;
         Transform myCar = Instantiate(myCarPrefab.GetComponent<Transform>(), positionTwo, Quaternion.identity);
         myCar.GetComponent<ControlScript>().EnableUser();
 
-
-        for (int i = 1; i < 9; i++)
+        //i < 9
+        for (int i = 1; i < 3; i++)
         {
             if (i == 2)
             {
@@ -144,7 +139,7 @@ public class InstantiateCars : MonoBehaviour
             }
 
             waitOne();
-            GameObject carPrefab = GameObject.Instantiate(Resources.Load("CarFullPrefab") as GameObject);
+            GameObject carPrefab = GameObject.Instantiate(Resources.Load("CarPrefab") as GameObject);
             Transform enemyCar = Instantiate(carPrefab.GetComponent<Transform>(), getPosition(i), Quaternion.identity);
             enemyCar.GetComponent<HealthControlScript>().DisableUser();
             enemyCar.GetComponent<GunControlScript>().DisableUser();

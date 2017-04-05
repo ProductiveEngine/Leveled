@@ -7,16 +7,16 @@ public class ControlScript : MonoBehaviour
 {
 
     //-- Sound ---------------------------------------------------------------------------------
-    public AudioClip engineSound = null;
-    public AudioClip ignitionSound = null;
-    public AudioClip turbo = null;
-    public AudioClip exSound = null;
+    public AudioClip engineSound;
+    public AudioClip ignitionSound;
+    public AudioClip turbo;
+    public AudioClip exSound;
     static float volume = 1;
 
-    private AudioSource engineAudio = null;
-    private AudioSource turboAudio = null;
-    private AudioSource ignitionAudio = null;
-    private AudioSource exAudio = null;
+    private AudioSource engineAudio;
+    private AudioSource turboAudio;
+    private AudioSource ignitionAudio;
+    private AudioSource exAudio;
 
     static void SetVolume(float v)
     {
@@ -92,6 +92,11 @@ public class ControlScript : MonoBehaviour
         if (tempEnemy != null)
         {
             enemy = tempEnemy;
+        }
+
+        if (enemy == null)
+        {
+            return;
         }
         ammo.SetEnemyLocked(enemy);
 
@@ -815,7 +820,7 @@ public class ControlScript : MonoBehaviour
         OverrideStart = false;
         userControl = true;
 
-
+        /*
         engineAudio = gameObject.AddComponent<AudioSource>();
         engineAudio.loop = true;
         engineAudio.playOnAwake = false;
@@ -839,6 +844,7 @@ public class ControlScript : MonoBehaviour
         exAudio.playOnAwake = false;
         exAudio.clip = exSound;
         exAudio.volume = volume;
+        */
 
         Camera.main.SendMessage("SetTarget", transform);
         Camera.main.SendMessage("setUpGamePlayGui", transform);
@@ -867,6 +873,9 @@ public class ControlScript : MonoBehaviour
 
     void Start()
     {
+        ammo = GetComponent<GunControlScript>();
+        health = GetComponent<HealthControlScript>();
+
         muzzleFlash.enabled = false;
         //------------------------------------------------------------------------------
         GameObject supertemp = GameObject.Find("ObstacleDetectort");
@@ -995,12 +1004,14 @@ public class ControlScript : MonoBehaviour
             {
                 Restore();
             }
+            /*
             GetComponent<AudioSource>().pitch = Mathf.Abs(engineRPM / maxRPM) + 1;
 
             if (GetComponent<AudioSource>().pitch > 2.0f)
             {
                 GetComponent<AudioSource>().pitch = 2.0f;
             }
+            */
         }
     }
 
@@ -1176,6 +1187,7 @@ public class ControlScript : MonoBehaviour
             ObstacleDetection();
         }
 
+        /*
         if (userControl && !ignitionAudio.isPlaying)
         {
             if (playOnce)
@@ -1192,6 +1204,7 @@ public class ControlScript : MonoBehaviour
                 StartEngineSound();
             }
         }
+        */
     }
     private bool playOnce = false;
     void StartEngineSound()

@@ -47,6 +47,7 @@ public class FlagScript : MonoBehaviour
     //-------------------------------------------------------------------------------
     void InstantiateFlag()
     {
+        return;
 
         // Find all game objects with tag Enemy
         GameObject[] gos;
