@@ -217,6 +217,7 @@ public class ControlScript : MonoBehaviour
         NavigateTowardsSpecificWaypoint(closestMissilePack);
     }
     //---------- Calculate Health Priority-----------------------------------------------
+    #region Calculate Health Priority
     float CalcHealthPriority(float tempHealth, Vector3 closestHealthPack)
     {
         float lowHealth = FuzzyReverseGrade(tempHealth, 15, 30);
@@ -685,8 +686,8 @@ public class ControlScript : MonoBehaviour
         }
 
     }
+    #endregion
     //--------------------------------------------------------------------------------------------------------------------
-
     //maximal corner and braking acceleration capabilities
     float maxCornerAccel = 5.0f;
     float maxBrakeAccel = 10.0f;
@@ -820,31 +821,35 @@ public class ControlScript : MonoBehaviour
         OverrideStart = false;
         userControl = true;
 
-        /*
+
         engineAudio = gameObject.AddComponent<AudioSource>();
-        engineAudio.loop = true;
+        /*engineAudio.loop = true;
         engineAudio.playOnAwake = false;
         engineAudio.clip = engineSound;
         engineAudio.volume = volume;
+        */
 
         turboAudio = gameObject.AddComponent<AudioSource>();
-        turboAudio.loop = false;
+        /*turboAudio.loop = false;
         turboAudio.playOnAwake = false;
         turboAudio.clip = turbo;
         turboAudio.volume = volume;
+        */
 
         ignitionAudio = gameObject.AddComponent<AudioSource>();
-        ignitionAudio.loop = false;
+        /*ignitionAudio.loop = false;
         ignitionAudio.playOnAwake = true;
         ignitionAudio.clip = ignitionSound;
         ignitionAudio.volume = volume;
+        */
 
         exAudio = gameObject.AddComponent<AudioSource>();
-        exAudio.loop = false;
+        /*exAudio.loop = false;
         exAudio.playOnAwake = false;
         exAudio.clip = exSound;
         exAudio.volume = volume;
         */
+
 
         Camera.main.SendMessage("SetTarget", transform);
         Camera.main.SendMessage("setUpGamePlayGui", transform);
@@ -1047,7 +1052,7 @@ public class ControlScript : MonoBehaviour
             }
         }
         // current wheels rpm 
-        float wheelsRpm = ComputeRpmFromWheels();
+        //float wheelsRpm = ComputeRpmFromWheels();
         // find maximum steer angle (dependent on car velocity) 
         float maxSteer = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, kmPerH / highSpeed);
         float wheelSteer = steer * maxSteer;
@@ -1205,6 +1210,7 @@ public class ControlScript : MonoBehaviour
             }
         }
         */
+
     }
     private bool playOnce = false;
     void StartEngineSound()
@@ -1383,7 +1389,7 @@ public class ControlScript : MonoBehaviour
         if (userControl)
         {
             //GUIOverlayTexture
-
+            GUI.depth = 1;
             GUI.skin = customSkin2;
             GUILayout.BeginArea(new Rect(60, Screen.height - (GUIOverlayTexture.height - 20), 200, 50));
             GUILayout.Label("	health : " + Mathf.RoundToInt(health.GetHealth()));

@@ -7,15 +7,15 @@ public class MissilePackManagementScript : MonoBehaviour
     private GameObject custom2;
     private GameObject custom3;
 
-    Vector3 pos1;
-    Vector3 pos2;
-    Vector3 pos3;
-    Vector3 pos4;
-    Vector3 pos5;
-    Vector3 pos6;
-    Vector3 pos7;
-    Vector3 pos8;
-    Vector3 pos9;
+    public Vector3 pos1;
+    public Vector3 pos2;
+    public Vector3 pos3;
+    public Vector3 pos4;
+    public Vector3 pos5;
+    public Vector3 pos6;
+    public Vector3 pos7;
+    public Vector3 pos8;
+    public Vector3 pos9;
 
     private GameObject[] gos;
 

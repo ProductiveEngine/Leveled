@@ -8,9 +8,9 @@ public class Radar : MonoBehaviour
     //Modified by Dastardly Banana to add radar size configuration, different colors for enemies in different states (patrolling or chasing), ability to move radar to either one of 9 preset locations or to custom location.
     //some lines are particular to our AI script, you will need to change "EnemyAINew" to the name of your AI script, and change "isChasing" to the bool  within that AI script that is true when the enemy is active/can see the player/is chasing the player.
 
-    Texture blip; // texture to use when the enemy isn't chasing
-    Texture blipChasing; //When Chasing
-    Texture radarBG;
+    public Texture blip; // texture to use when the enemy isn't chasing
+    public Texture blipChasing; //When Chasing
+    public Texture radarBG;
 
     Transform centerObject;
     float mapScale = 0.3f;

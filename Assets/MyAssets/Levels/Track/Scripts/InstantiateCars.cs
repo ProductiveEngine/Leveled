@@ -125,13 +125,11 @@ public class InstantiateCars : MonoBehaviour
 
     private void showTheCar()
     {
-        myCarPrefab = GameObject.Instantiate(Resources.Load("CarPrefab") as GameObject);
+        myCarPrefab = GameObject.Instantiate(Resources.Load("CarPrefab") as GameObject, positionTwo, Quaternion.identity);
         myCarPrefab.GetComponent<ControlScript>().waitCountDown = true;
-        Transform myCar = Instantiate(myCarPrefab.GetComponent<Transform>(), positionTwo, Quaternion.identity);
-        myCar.GetComponent<ControlScript>().EnableUser();
+        myCarPrefab.GetComponent<ControlScript>().EnableUser();
 
-        //i < 9
-        for (int i = 1; i < 3; i++)
+        for (int i = 1; i < 9; i++)
         {
             if (i == 2)
             {
@@ -139,8 +137,7 @@ public class InstantiateCars : MonoBehaviour
             }
 
             waitOne();
-            GameObject carPrefab = GameObject.Instantiate(Resources.Load("CarPrefab") as GameObject);
-            Transform enemyCar = Instantiate(carPrefab.GetComponent<Transform>(), getPosition(i), Quaternion.identity);
+            GameObject enemyCar = Instantiate(Resources.Load("CarPrefab") as GameObject, getPosition(i), Quaternion.identity);
             enemyCar.GetComponent<HealthControlScript>().DisableUser();
             enemyCar.GetComponent<GunControlScript>().DisableUser();
             enemyCar.GetComponent<ControlScript>().DisableUser();

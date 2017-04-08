@@ -5,10 +5,10 @@ public class HealthPackManagement : MonoBehaviour
 {
     private GameObject custom1;
 
-    Vector3 pos1;
-    Vector3 pos2;
-    Vector3 pos3;
-    Vector3 pos4;
+    public Vector3 pos1;
+    public Vector3 pos2;
+    public Vector3 pos3;
+    public Vector3 pos4;
 
     private GameObject[] gos;
 
