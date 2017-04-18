@@ -12,7 +12,7 @@ public class Radar : MonoBehaviour
     public Texture blipChasing; //When Chasing
     public Texture radarBG;
 
-    Transform centerObject;
+    public Transform centerObject;
     float mapScale = 0.3f;
     float mapSizePercent = 15;
 
