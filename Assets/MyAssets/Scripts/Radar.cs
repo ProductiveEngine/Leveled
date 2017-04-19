@@ -110,7 +110,7 @@ public class Radar : MonoBehaviour
         foreach (GameObject go in gos)
         {
             Texture blipChoice = blip;
-            if (!go.GetComponent<ControlScript>().userControl)
+            if (!go.GetComponent<ControlScript>().UserControl)
             {
                 //EnemyAI aiScript = go.GetComponent<"EnemyAI">();
                 //  if(aiScript.isChasing)

@@ -74,7 +74,7 @@ public class HealthControlScript : MonoBehaviour
             float tempC = collision.relativeVelocity.magnitude / 10;
             health = health - tempC;
 
-            if (collision.gameObject.tag == "carTag" && health <= 0 && collision.gameObject.GetComponent<ControlScript>().userControl)
+            if (collision.gameObject.tag == "carTag" && health <= 0 && collision.gameObject.GetComponent<ControlScript>().UserControl)
             {
                 collision.gameObject.GetComponent<HealthControlScript>().fatalityBonusAdder();
             }
@@ -94,7 +94,7 @@ public class HealthControlScript : MonoBehaviour
                 gos = GameObject.FindGameObjectsWithTag("carTag");
                 foreach (GameObject go in gos)
                 {
-                    if (go.GetComponent<ControlScript>().userControl)
+                    if (go.GetComponent<ControlScript>().UserControl)
                     {
                         go.GetComponent<HealthControlScript>().IncreasePointsKeeper(10);
                         if (health <= 0)
@@ -123,7 +123,7 @@ public class HealthControlScript : MonoBehaviour
                 gos = GameObject.FindGameObjectsWithTag("carTag");
                 foreach (GameObject go in gos)
                 {
-                    if (go.GetComponent<ControlScript>().userControl)
+                    if (go.GetComponent<ControlScript>().UserControl)
                     {
                         go.GetComponent<HealthControlScript>().IncreasePointsKeeper(5);
                         if (health <= 0)
@@ -149,7 +149,7 @@ public class HealthControlScript : MonoBehaviour
                 gos = GameObject.FindGameObjectsWithTag("carTag");
                 foreach (GameObject go in gos)
                 {
-                    if (go.GetComponent<ControlScript>().userControl)
+                    if (go.GetComponent<ControlScript>().UserControl)
                     {
                         go.GetComponent<HealthControlScript>().IncreasePointsKeeper(20);
                         if (health <= 0)

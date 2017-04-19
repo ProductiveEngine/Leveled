@@ -4,6 +4,11 @@ using UnityEngine;
 
 public partial class ControlScript : MonoBehaviour
 {
+    public bool UserControl = true;
+
+
+    private Wheel[] _wheels;
+
     #region var
 
     private float smoothSidewaysSlip = 0.0f;
@@ -66,7 +71,7 @@ public partial class ControlScript : MonoBehaviour
 
     bool enableControlToWaypoints = true;
     //---------------------------------------------------------------------------------------
-    private Wheel[] wheels;
+
     Vector3 velo = Vector3.zero; //rigidbody velocity
     Vector3 flatVelo = new Vector3();
     float kmPerH = 0;
@@ -114,7 +119,7 @@ public partial class ControlScript : MonoBehaviour
     #region Unity   
     void OnGUI()
     {
-        if (userControl)
+        if (UserControl)
         {
             //GUIOverlayTexture
             GUI.depth = 1;
@@ -210,33 +215,40 @@ public partial class ControlScript : MonoBehaviour
         Transform bh = transform.Find("collider");
         bcollider = bh.GetComponent<BoxCollider>();
 
-        //Wheel colliders creation 
-        wheels = new Wheel[4];
+        InitializeWheels();
+        GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.1f, 0.0f);
+        currentGear = 1;
+    }
+
+    private void InitializeWheels()
+    {
+
+        _wheels = new Wheel[4];
 
         for (int i = 0; i < 4; i++)
         {
-            wheels[i] = new Wheel();
+            _wheels[i] = new Wheel();
         }
 
         //Assign geometry
-        wheels[0].geometry = FL;
-        wheels[1].geometry = FR;
-        wheels[2].geometry = RL;
-        wheels[3].geometry = RR;
+        _wheels[0].geometry = FL;
+        _wheels[1].geometry = FR;
+        _wheels[2].geometry = RL;
+        _wheels[3].geometry = RR;
 
-        //
-        wheels[0].maxSteerAngle = 30.0f;
-        wheels[1].maxSteerAngle = 30.0f;
-        wheels[0].powered = false;
-        wheels[1].powered = false;
-        wheels[2].powered = true;
-        wheels[3].powered = true;
-        wheels[2].handbraked = true;
-        wheels[3].handbraked = true;
+        _wheels[0].maxSteerAngle = 30.0f;
+        _wheels[1].maxSteerAngle = 30.0f;
 
-        foreach (Wheel w in wheels)
+        _wheels[0].powered = false;
+        _wheels[1].powered = false;
+        _wheels[2].powered = true;
+        _wheels[3].powered = true;
+
+        _wheels[2].handbraked = true;
+        _wheels[3].handbraked = true;
+
+        foreach (Wheel w in _wheels)
         {
-
             w.originalRotation = w.geometry.localRotation;
 
             GameObject colliderObject = new GameObject("WheelCollider");
@@ -253,9 +265,8 @@ public partial class ControlScript : MonoBehaviour
             w.coll.forwardFriction = new WheelFrictionCurve() { stiffness = 2.092f };
             w.coll.sidewaysFriction = new WheelFrictionCurve() { stiffness = 0.022f };
         }
-        GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.1f, 0.0f);
-        currentGear = 1;
     }
+
     void FixedUpdate()
     {
         // calculate current speed in km/h 
@@ -270,7 +281,7 @@ public partial class ControlScript : MonoBehaviour
         }
         else
         {
-            if (userControl)
+            if (UserControl)
             {
                 steer = Input.GetAxis("Horizontal");
                 motor = Mathf.Clamp01(Input.GetAxis("Vertical"));
@@ -285,21 +296,27 @@ public partial class ControlScript : MonoBehaviour
                 handbrake = inputHandbrake;
             }
         }
-        // current wheels rpm 
-        //float wheelsRpm = ComputeRpmFromWheels();
+
         // find maximum steer angle (dependent on car velocity) 
         float maxSteer = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, kmPerH / highSpeed);
         float wheelSteer = steer * maxSteer;
 
-        if (userControl && handbrake > 0)
+        try
         {
-            wheels[0].coll.steerAngle = 5 * steer;
-            wheels[1].coll.steerAngle = 5 * steer;
+            if (UserControl && handbrake > 0)
+            {
+                _wheels[0].coll.steerAngle = 5 * steer;
+                _wheels[1].coll.steerAngle = 5 * steer;
+            }
+            else
+            {
+                _wheels[0].coll.steerAngle = wheelSteer;
+                _wheels[1].coll.steerAngle = wheelSteer;
+            }
         }
-        else
+        catch (Exception e)
         {
-            wheels[0].coll.steerAngle = wheelSteer;
-            wheels[1].coll.steerAngle = wheelSteer;
+            Debug.Log(e.Message);
         }
         //
         ApplyDownPressure();
@@ -338,27 +355,29 @@ public partial class ControlScript : MonoBehaviour
             }
             if (kmPerH > 350)
             {
-                wheels[0].coll.motorTorque = 0;
-                wheels[2].coll.motorTorque = 0;
-                wheels[1].coll.motorTorque = 0;
-                wheels[3].coll.motorTorque = 0;
+                _wheels[0].coll.motorTorque = 0;
+                _wheels[2].coll.motorTorque = 0;
+                _wheels[1].coll.motorTorque = 0;
+                _wheels[3].coll.motorTorque = 0;
             }
             else
             {
-                wheels[0].coll.motorTorque = 1.5f * axisTorque * motor;
-                wheels[2].coll.motorTorque = 1.5f * axisTorque * motor;
-                wheels[1].coll.motorTorque = 1.5f * axisTorque * motor;
 
-                wheels[3].coll.motorTorque = 1.5f * axisTorque * motor;
+
+                _wheels[0].coll.motorTorque = 1.5f * axisTorque * motor;
+                _wheels[2].coll.motorTorque = 1.5f * axisTorque * motor;
+                _wheels[1].coll.motorTorque = 1.5f * axisTorque * motor;
+
+                _wheels[3].coll.motorTorque = 1.5f * axisTorque * motor;
             }
         }
 
         if (brake > 0.0f || handbrake > 0.0f)
         {
-            if (userControl && handbrake > 0.0f)
+            if (UserControl && handbrake > 0.0f)
             {
-                wheels[2].coll.motorTorque = 0;
-                wheels[3].coll.motorTorque = 0;
+                _wheels[2].coll.motorTorque = 0;
+                _wheels[3].coll.motorTorque = 0;
 
                 ApplyAdditionalSteeringForce(steer);
             }
@@ -376,10 +395,10 @@ public partial class ControlScript : MonoBehaviour
                 Vector3 brakeForce = -flatVelo.normalized * totalbrake * GetComponent<Rigidbody>().mass * maxBrakeAccel;
                 GetComponent<Rigidbody>().AddForceAtPosition(brakeForce, transform.position);
 
-                wheels[0].coll.motorTorque = 0;
-                wheels[1].coll.motorTorque = 0;
-                wheels[2].coll.motorTorque = 0;
-                wheels[3].coll.motorTorque = 0;
+                _wheels[0].coll.motorTorque = 0;
+                _wheels[1].coll.motorTorque = 0;
+                _wheels[2].coll.motorTorque = 0;
+                _wheels[3].coll.motorTorque = 0;
             }
 
         }
@@ -387,7 +406,7 @@ public partial class ControlScript : MonoBehaviour
         //wheel GFX
         UpdateWheels();
 
-        if (!userControl && !OverrideStart)
+        if (!UserControl && !OverrideStart)
         {
             if (flagRaised)
             {
@@ -458,7 +477,7 @@ public partial class ControlScript : MonoBehaviour
         float totalSlip = 0.0f;
         onGround = false;
 
-        foreach (Wheel w in wheels)
+        foreach (Wheel w in _wheels)
         {
             //rotate wheel
             w.rotation += wheelRPM / 60.0f * rev * 360.0f * Time.fixedDeltaTime;
@@ -488,15 +507,15 @@ public partial class ControlScript : MonoBehaviour
     }
     void RestoreFriction()
     {
-        wheels[0].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
-        wheels[1].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
-        wheels[2].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
-        wheels[3].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[0].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[1].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[2].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[3].coll.sidewaysFriction = new WheelFrictionCurve() { extremumValue = (20000) };
 
-        wheels[0].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
-        wheels[1].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
-        wheels[2].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
-        wheels[3].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[0].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[1].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[2].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
+        _wheels[3].coll.forwardFriction = new WheelFrictionCurve() { extremumValue = (20000) };
 
     }
     void ApplyAdditionalSteeringForce(float addSteer)
@@ -507,7 +526,7 @@ public partial class ControlScript : MonoBehaviour
 
         steerForce.x = addSteer * 500;
 
-        foreach (Wheel w in wheels)
+        foreach (Wheel w in _wheels)
         {
             if (w.coll.isGrounded)
             {
@@ -525,7 +544,7 @@ public partial class ControlScript : MonoBehaviour
         float sidewaysSlip = 0.0f;
         float forwardSlip = 0.0f;
 
-        foreach (var w in wheels)
+        foreach (var w in _wheels)
         {
             if (w.coll.isGrounded)
             {
@@ -627,7 +646,7 @@ public partial class ControlScript : MonoBehaviour
         float rpm = 0.0f;
         float count = 0;
 
-        foreach (var w in wheels)
+        foreach (var w in _wheels)
         {
             if (w.powered)
             {
@@ -652,7 +671,7 @@ public partial class ControlScript : MonoBehaviour
             if (engineRPM > shiftUpRPM && currentGear < gearRatios.Length - 1)
             {
                 currentGear++;
-                if (userControl)
+                if (UserControl)
                 {
                     turboAudio.Play();
                     muzzleFlash.enabled = true;
@@ -667,7 +686,7 @@ public partial class ControlScript : MonoBehaviour
             if (engineRPM < shiftDownRPM && currentGear > 1)
             {
                 currentGear--;
-                if (userControl)
+                if (UserControl)
                 {
                     exAudio.Play();
                     muzzleFlash.enabled = true;

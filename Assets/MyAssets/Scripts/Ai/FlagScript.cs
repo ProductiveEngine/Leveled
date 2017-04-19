@@ -72,7 +72,7 @@ public class FlagScript : MonoBehaviour
 
         foreach (GameObject go in gos)
         {
-            if (!go.GetComponent<ControlScript>().userControl)
+            if (!go.GetComponent<ControlScript>().UserControl)
             {
                 startNode = FindStart(go.transform.position.x, go.transform.position.z);
                 Search(grid, startNode, grid[x][y] as NodeInfo);
@@ -117,7 +117,7 @@ public class FlagScript : MonoBehaviour
         gos = GameObject.FindGameObjectsWithTag("carTag");
         foreach (GameObject go in gos)
         {
-            if (!go.GetComponent<ControlScript>().userControl)
+            if (!go.GetComponent<ControlScript>().UserControl)
             {
                 go.BroadcastMessage("ResetFlag", 5);
             }

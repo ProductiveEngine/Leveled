@@ -11,7 +11,7 @@ public partial class ControlScript
 
     private BoxCollider bcollider;
 
-    public bool userControl = true;
+
     private int remainingOpp = 7;
 
     bool activateStuck = false;
@@ -47,7 +47,7 @@ public partial class ControlScript
     public void EnableUser()
     {
         OverrideStart = false;
-        userControl = true;
+        UserControl = true;
 
 
         engineAudio = gameObject.AddComponent<AudioSource>();
@@ -90,7 +90,7 @@ public partial class ControlScript
     }
     public void DisableUser()
     {
-        userControl = false;
+        UserControl = false;
         Invoke("setOverrideStart", 4);
     }
     void setOverrideStart()
@@ -503,7 +503,7 @@ public partial class ControlScript
 
     void Update()
     {
-        if (userControl)
+        if (UserControl)
         {
             enemyLocked = FindClosestEnemy();
             ammo.SetEnemyLocked(enemyLocked);
@@ -577,17 +577,17 @@ public partial class ControlScript
 
         remainingOpp = gos.Length - 1;
 
-        if (userControl && gos.Length == 8)
+        if (UserControl && gos.Length == 8)
         {
             checkAllEnemies = true;
 
         }
-        if (gos.Length == 1 && checkAllEnemies && userControl)
+        if (gos.Length == 1 && checkAllEnemies && UserControl)
         {
             float finalScore = health.pointsKeeper + 100 * health.fatalityBonus + health.GetHealth() +
                                200 * captureFlagBonus;
             OverrideStart = true;
-            userControl = false;
+            UserControl = false;
             Camera.main.SendMessage("PlayerWon", 5);
         }
 
