@@ -11,6 +11,8 @@ public partial class ControlScript : MonoBehaviour
 
     #region var
 
+    private Rigidbody rigidbody;
+
     private float smoothSidewaysSlip = 0.0f;
     private float smoothForwardSlip = 0.0f;
     private float maxDownPressureForce = -1500.0f;
@@ -31,7 +33,7 @@ public partial class ControlScript : MonoBehaviour
     public float engineRPM = 0.0f;
     float wheelRPM = 0.0f;
 
-    int rev = 1;
+    public int rev = 1;
     //suspension setup
     float suspensionDistance = 0.1f;
     float springs = 1000;
@@ -72,9 +74,9 @@ public partial class ControlScript : MonoBehaviour
     bool enableControlToWaypoints = true;
     //---------------------------------------------------------------------------------------
 
-    Vector3 velo = Vector3.zero; //rigidbody velocity
+    public Vector3 velo = Vector3.zero; //rigidbody velocity
     Vector3 flatVelo = new Vector3();
-    float kmPerH = 0;
+    public float kmPerH = 0;
     private bool onGround;
     private GameObject enemyLocked;
     bool OverrideStart = true;
@@ -188,7 +190,7 @@ public partial class ControlScript : MonoBehaviour
             GUILayout.EndArea();
         }
     }
-    void Start()
+    void Awake()
     {
         ammo = GetComponent<GunControlScript>();
         health = GetComponent<HealthControlScript>();
@@ -216,7 +218,8 @@ public partial class ControlScript : MonoBehaviour
         bcollider = bh.GetComponent<BoxCollider>();
 
         InitializeWheels();
-        GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.1f, 0.0f);
+        rigidbody = GetComponent<Rigidbody>();
+        rigidbody.centerOfMass = new Vector3(0.0f, -0.1f, 0.0f);
         currentGear = 1;
     }
 
@@ -262,7 +265,7 @@ public partial class ControlScript : MonoBehaviour
             w.coll.radius = wheelRadius;
             w.coll.mass = wheelMass;
             //--------------------
-            w.coll.forwardFriction = new WheelFrictionCurve() { stiffness = 2.092f };
+            //w.coll.forwardFriction = new WheelFrictionCurve() { stiffness = 0.1f };
             w.coll.sidewaysFriction = new WheelFrictionCurve() { stiffness = 0.022f };
         }
     }
@@ -270,8 +273,8 @@ public partial class ControlScript : MonoBehaviour
     void FixedUpdate()
     {
         // calculate current speed in km/h 
-        kmPerH = GetComponent<Rigidbody>().velocity.magnitude * 3600 / 1000;
-        velo = GetComponent<Rigidbody>().velocity;
+        kmPerH = rigidbody.velocity.magnitude * 3600 / 1000;
+        velo = rigidbody.velocity;
 
         if (waitCountDown || OverrideStart)
         {
@@ -318,9 +321,10 @@ public partial class ControlScript : MonoBehaviour
         {
             Debug.Log(e.Message);
         }
-        //
+
         ApplyDownPressure();
         // motor & brake 
+
         if (currentGear == 0)
         {
             if (motor > 0 && kmPerH < 5)
@@ -353,6 +357,8 @@ public partial class ControlScript : MonoBehaviour
             {
                 Invoke("RestoreFriction", 0.1f);
             }
+
+
             if (kmPerH > 350)
             {
                 _wheels[0].coll.motorTorque = 0;
@@ -367,7 +373,6 @@ public partial class ControlScript : MonoBehaviour
                 _wheels[0].coll.motorTorque = 1.5f * axisTorque * motor;
                 _wheels[2].coll.motorTorque = 1.5f * axisTorque * motor;
                 _wheels[1].coll.motorTorque = 1.5f * axisTorque * motor;
-
                 _wheels[3].coll.motorTorque = 1.5f * axisTorque * motor;
             }
         }
@@ -392,8 +397,8 @@ public partial class ControlScript : MonoBehaviour
                     totalbrake = 1.0f;
                 }
 
-                Vector3 brakeForce = -flatVelo.normalized * totalbrake * GetComponent<Rigidbody>().mass * maxBrakeAccel;
-                GetComponent<Rigidbody>().AddForceAtPosition(brakeForce, transform.position);
+                Vector3 brakeForce = -flatVelo.normalized * totalbrake * rigidbody.mass * maxBrakeAccel;
+                rigidbody.AddForceAtPosition(brakeForce, transform.position);
 
                 _wheels[0].coll.motorTorque = 0;
                 _wheels[1].coll.motorTorque = 0;
@@ -405,7 +410,7 @@ public partial class ControlScript : MonoBehaviour
 
         //wheel GFX
         UpdateWheels();
-
+        /*
         if (!UserControl && !OverrideStart)
         {
             if (flagRaised)
@@ -445,7 +450,7 @@ public partial class ControlScript : MonoBehaviour
             ObstacleDetection();
         }
 
-        /*
+        
         if (userControl && !ignitionAudio.isPlaying)
         {
             if (playOnce)
@@ -469,7 +474,7 @@ public partial class ControlScript : MonoBehaviour
     void UpdateWheels()
     {
         //calculate handbrake slip for traction gfx
-        float handbrakeSlip = handbrake * GetComponent<Rigidbody>().velocity.magnitude * 0.1f;
+        float handbrakeSlip = handbrake * rigidbody.velocity.magnitude * 0.1f;
 
         if (handbrakeSlip > 1)
             handbrakeSlip = 1;
@@ -522,7 +527,7 @@ public partial class ControlScript : MonoBehaviour
     {
         Vector3 steerForce = new Vector3(0, 0, 0);
         Vector3 localPos = new Vector3(0, 0, 0);
-        localPos = transform.InverseTransformPoint(GetComponent<Rigidbody>().position);
+        localPos = transform.InverseTransformPoint(rigidbody.position);
 
         steerForce.x = addSteer * 500;
 
@@ -544,18 +549,25 @@ public partial class ControlScript : MonoBehaviour
         float sidewaysSlip = 0.0f;
         float forwardSlip = 0.0f;
 
-        foreach (var w in _wheels)
+        try
         {
-            if (w.coll.isGrounded)
+            foreach (var w in _wheels)
             {
-                ++groundedCount;
-                WheelHit hit;
-                WheelCollider wc = w.coll;
-                wc.GetGroundHit(out hit);
-                sidewaysSlip += hit.sidewaysSlip;
-                forwardSlip += hit.forwardSlip;
-                //temp = w.coll.radius;
+                if (w.coll.isGrounded)
+                {
+                    ++groundedCount;
+                    WheelHit hit;
+                    WheelCollider wc = w.coll;
+                    wc.GetGroundHit(out hit);
+                    sidewaysSlip += hit.sidewaysSlip;
+                    forwardSlip += hit.forwardSlip;
+                    //temp = w.coll.radius;
+                }
             }
+        }
+        catch (Exception e)
+        {
+
         }
 
         if (groundedCount > 0)
@@ -571,7 +583,7 @@ public partial class ControlScript : MonoBehaviour
         if (groundedCount > 0)
         {
             Vector3 downPressure = new Vector3(0, 0, 0);
-            downPressure.y = -Mathf.Pow(GetComponent<Rigidbody>().velocity.magnitude, 1.2f) * downPressureFactor;
+            downPressure.y = -Mathf.Pow(rigidbody.velocity.magnitude, 1.2f) * downPressureFactor;
             downPressure.y = Mathf.Max(downPressure.y, maxDownPressureForce);
 
             Vector3 localPos = new Vector3(0, 0, 0);
@@ -579,20 +591,20 @@ public partial class ControlScript : MonoBehaviour
             localPos.x = -Mathf.Sign(localPos.x) * localPos.x * localPos.x;
             float hwidth = bcollider.size.x / 2.0f; // ------------------------------------------------------
             localPos.x = Mathf.Clamp(localPos.x, -hwidth, hwidth);
-            Vector3 worldPos = GetComponent<Rigidbody>().position + GetComponent<Rigidbody>().rotation * localPos;
+            Vector3 worldPos = rigidbody.position + rigidbody.rotation * localPos;
             downPressure = transform.TransformDirection(downPressure);
 
-            GetComponent<Rigidbody>().AddForceAtPosition(downPressure, worldPos, ForceMode.Acceleration);
-            GetComponent<Rigidbody>()
+            rigidbody.AddForceAtPosition(downPressure, worldPos, ForceMode.Acceleration);
+            rigidbody
                 .AddForceAtPosition(downPressure, new Vector3(worldPos.x + 10, worldPos.y, worldPos.z + 10),
                     ForceMode.Acceleration);
-            GetComponent<Rigidbody>()
+            rigidbody
                 .AddForceAtPosition(downPressure, new Vector3(worldPos.x - 10, worldPos.y, worldPos.z + 10),
                     ForceMode.Acceleration);
-            GetComponent<Rigidbody>()
+            rigidbody
                 .AddForceAtPosition(downPressure, new Vector3(worldPos.x + 10, worldPos.y, worldPos.z - 10),
                     ForceMode.Acceleration);
-            GetComponent<Rigidbody>()
+            rigidbody
                 .AddForceAtPosition(downPressure, new Vector3(worldPos.x - 10, worldPos.y, worldPos.z - 10),
                     ForceMode.Acceleration);
         }

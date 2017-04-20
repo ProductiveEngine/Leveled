@@ -9,7 +9,7 @@ public class GamePlayGui : MonoBehaviour
 
     private bool ok = false;
 
-    Texture needle;
+    public Texture needle;
 
     float turn = 0.0f;
 
@@ -55,15 +55,15 @@ public class GamePlayGui : MonoBehaviour
     {
         if (ok)
         {
-            // turn = carControlExternalScript.engineRPM;
-            // turn = (turn / 3500) * 90 + 35;
+            turn = carControlExternalScript.engineRPM;
+            turn = (turn / 3500) * 90 + 35;
         }
 
     }
     void makeOK()
     {
         ok = true;
-        //carControlExternalScript = customprefab.GetComponent<ControlScript>();
+        carControlExternalScript = customprefab.GetComponent<ControlScript>();
     }
 
 

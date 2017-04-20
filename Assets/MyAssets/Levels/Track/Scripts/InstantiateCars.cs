@@ -129,6 +129,7 @@ public class InstantiateCars : MonoBehaviour
         myCarPrefab.GetComponent<ControlScript>().waitCountDown = true;
         myCarPrefab.GetComponent<ControlScript>().EnableUser();
 
+
         for (int i = 1; i < 9; i++)
         {
             if (i == 2)
